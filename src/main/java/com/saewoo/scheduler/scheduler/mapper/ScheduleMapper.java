@@ -5,10 +5,10 @@ import com.saewoo.scheduler.scheduler.dto.SchedulePostDto;
 import com.saewoo.scheduler.scheduler.dto.ScheduleResponseDto;
 import com.saewoo.scheduler.scheduler.dto.SchedulesResponseDto;
 import com.saewoo.scheduler.scheduler.entity.Schedule;
+import com.saewoo.scheduler.scheduler.utility.PageInfo;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @NoArgsConstructor
@@ -60,13 +60,19 @@ public class ScheduleMapper {
         }
     }
 
-    public SchedulesResponseDto schedulListToSchedulesResponseDto(List<Schedule> scheduleList) {
+    public SchedulesResponseDto schedulListToSchedulesResponseDto(Page<Schedule> scheduleList) {
         if(scheduleList.isEmpty()) {
             return null;
         }
         else {
             SchedulesResponseDto schedulesResponseDto = SchedulesResponseDto.builder()
-                    .data(scheduleList)
+                    .data(scheduleList.getContent())
+                    .pageInfo(PageInfo.builder()
+                            .pageNumber(scheduleList.getNumber())
+                            .pageSize(scheduleList.getSize())
+                            .totalElements(scheduleList.getTotalElements())
+                            .totalPages(scheduleList.getTotalPages())
+                            .build())
                     .build();
 
             return schedulesResponseDto;

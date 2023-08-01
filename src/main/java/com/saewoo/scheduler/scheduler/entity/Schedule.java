@@ -15,8 +15,8 @@ import java.util.Date;
 @Setter
 @Getter
 @DynamicUpdate
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Schedule {
 
     @Id

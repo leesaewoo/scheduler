@@ -4,12 +4,15 @@ import com.saewoo.scheduler.scheduler.entity.Schedule;
 import com.saewoo.scheduler.scheduler.exception.CustomException;
 import com.saewoo.scheduler.scheduler.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Iterator;
-import java.util.List;
 
 @Service
 @Transactional
@@ -28,8 +31,11 @@ public class ScheduleService {
         return schedule;
     }
 
-    public List<Schedule> findSchedules() {
-        List<Schedule> schedules = scheduleRepository.findAll();
+    public Page<Schedule> findSchedules(int pageNumber, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, Sort.by("scheduleId").descending());
+
+        Page<Schedule> schedules = scheduleRepository.findAll(pageable);
 
         Iterator<Schedule> iterator = schedules.iterator();
 

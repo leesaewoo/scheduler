@@ -9,6 +9,7 @@ import com.saewoo.scheduler.scheduler.mapper.ScheduleMapper;
 import com.saewoo.scheduler.scheduler.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,7 +37,7 @@ public class ScheduleController {
 
         ScheduleResponseDto response = scheduleMapper.scheduleEntityToSchedulerResponseDto(postedSchedule);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{scheduleId}")
@@ -49,8 +50,9 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity getSchedules() {
-        List<Schedule> scheduleList = scheduleService.findSchedules();
+    public ResponseEntity getSchedules(@RequestParam @Positive int pageNumber,
+                                       @RequestParam @Positive int pageSize) {
+        Page<Schedule> scheduleList = scheduleService.findSchedules(pageNumber, pageSize);
 
         SchedulesResponseDto responses = scheduleMapper.schedulListToSchedulesResponseDto(scheduleList);
 
@@ -73,13 +75,13 @@ public class ScheduleController {
     public ResponseEntity deleteSchedules() {
         scheduleService.deleteSchedules();
 
-        return new ResponseEntity<>("Deleted All Schedule", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity deleteSchedules(@PathVariable("scheduleId") @Positive long scheduleId) {
         scheduleService.deleteSchedule(scheduleId);
-        String response = "Deleted Schedule (Schedule Id : " + scheduleId + ")";
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 }
