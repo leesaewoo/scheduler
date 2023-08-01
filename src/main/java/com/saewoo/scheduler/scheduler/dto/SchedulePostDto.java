@@ -1,21 +1,19 @@
-package com.saewoo.scheduler.scheduler;
+package com.saewoo.scheduler.scheduler.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
+@Builder
 @Getter
-public class SchedulerPostDto {
+public class SchedulePostDto {
 
-    @NotBlank
     private String title;
 
-    @NotEmpty
-    @Range(min = 1, max = 255)
-    private int todoOrder;
+    private Integer todoOrder;
 
-    @NotEmpty
     private boolean completed;
 }
