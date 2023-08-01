@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
-import java.util.List;
-
+@CrossOrigin("http://todobackend.com")
 @RestController
 @RequestMapping("/test")
 @Validated
