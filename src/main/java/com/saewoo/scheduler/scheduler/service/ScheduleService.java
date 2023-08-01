@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -30,9 +31,13 @@ public class ScheduleService {
     public List<Schedule> findSchedules() {
         List<Schedule> schedules = scheduleRepository.findAll();
 
-        for(Schedule schedule : schedules) {
+        Iterator<Schedule> iterator = schedules.iterator();
+
+        while(iterator.hasNext()) {
+            Schedule schedule = iterator.next();
+
             if(schedule.isDeleted()) {
-                schedules.remove(schedule);
+                iterator.remove();
             }
         }
 
