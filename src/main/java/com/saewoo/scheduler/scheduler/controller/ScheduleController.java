@@ -19,7 +19,7 @@ import javax.validation.constraints.Positive;
 
 @CrossOrigin("http://todobackend.com")
 @RestController
-@RequestMapping("/test")
+@RequestMapping
 @Validated
 @RequiredArgsConstructor
 @Slf4j
@@ -39,9 +39,9 @@ public class ScheduleController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{scheduleId}")
-    public ResponseEntity getSchedule(@PathVariable("scheduleId") @Positive long scheduleId) {
-        Schedule foundScheduleEntity = scheduleService.findSchedule(scheduleId);
+    @GetMapping("/{id}")
+    public ResponseEntity getSchedule(@PathVariable("id") @Positive long id) {
+        Schedule foundScheduleEntity = scheduleService.findSchedule(id);
 
         ScheduleResponseDto response = scheduleMapper.scheduleEntityToSchedulerResponseDto(foundScheduleEntity);
 
@@ -58,11 +58,11 @@ public class ScheduleController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
-    @PatchMapping("{scheduleId}")
-    public ResponseEntity patchSchedule(@PathVariable("scheduleId") @Positive long scheduleId,
+    @PatchMapping("{id}")
+    public ResponseEntity patchSchedule(@PathVariable("id") @Positive long id,
                                         @RequestBody @Valid SchedulePatchDto schedulePatchDto) {
         Schedule schedule = scheduleMapper.schedulePatchDtoToSchedule(schedulePatchDto);
-        schedule.setScheduleId(scheduleId);
+        schedule.setId(id);
         schedule = scheduleService.updateSchedule(schedule);
 
         ScheduleResponseDto response = scheduleMapper.scheduleEntityToSchedulerResponseDto(schedule);
@@ -77,9 +77,9 @@ public class ScheduleController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/{scheduleId}")
-    public ResponseEntity deleteSchedules(@PathVariable("scheduleId") @Positive long scheduleId) {
-        scheduleService.deleteSchedule(scheduleId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteSchedules(@PathVariable("id") @Positive long id) {
+        scheduleService.deleteSchedule(id);
 
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }

@@ -50,7 +50,7 @@ public class ScheduleMapper {
         }
         else {
             ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.builder()
-                    .scheduleId(schedule.getScheduleId())
+                    .id(schedule.getId())
                     .title(schedule.getTitle())
                     .todoOrder(schedule.getTodoOrder())
                     .completed(schedule.isCompleted())

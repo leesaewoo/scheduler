@@ -21,7 +21,7 @@ public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long scheduleId;
+    private long id;
 
     private String title;
 
