@@ -2,15 +2,14 @@ package com.saewoo.scheduler.scheduler.entity;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.web.util.UriComponents;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
 @Entity
+@Table(name = "todos")
 @Builder
 @Setter
 @Getter
