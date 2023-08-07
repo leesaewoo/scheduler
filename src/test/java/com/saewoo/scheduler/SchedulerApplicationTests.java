@@ -3,23 +3,26 @@ package com.saewoo.scheduler;
 import com.saewoo.scheduler.scheduler.entity.Schedule;
 import com.saewoo.scheduler.scheduler.exception.CustomException;
 import com.saewoo.scheduler.scheduler.repository.ScheduleRepository;
+import com.saewoo.scheduler.scheduler.service.ScheduleService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
 
-//TODO: 테스트 코드 작성하기
-//@SpringBootTest
+//TODO: 테스트 코드 작성하기, MockBean 에 대해서 더 공부하기
 @DataJpaTest
-class SchedulerApplicationTests {
+class ScheduleRepositoryTest {
 
 	@Autowired
 	ScheduleRepository scheduleRepository;
+
+	@MockBean
+	ScheduleService scheduleService;
 
 	@Test
 	@DisplayName("스케쥴 빌더 테스트")
@@ -39,8 +42,8 @@ class SchedulerApplicationTests {
 	}
 
 	@Test
-	@DisplayName("DB 세이브 테스트")
-	void repositorySaveTest() {
+	@DisplayName("DB 세이브&겟 테스트")
+	void repositorySaveAndGetTest() {
 		//given
 		Schedule schedule1 = Schedule.builder()
 				.title("Test Title1")
@@ -58,12 +61,15 @@ class SchedulerApplicationTests {
 		scheduleRepository.save(schedule2);
 
 		//when
-		List<Schedule> result = scheduleRepository.findAll();
+		List<Schedule> result1 = scheduleRepository.findAll();
+		Schedule result2 = scheduleRepository.findById(1L).orElseThrow();
 
 		//then
-		Assertions.assertThat(result.size()).isEqualTo(2);
-		Assertions.assertThat(result.get(0).getId()).isEqualTo(1L);
-		Assertions.assertThat(result.get(1).getId()).isEqualTo(2L);
+		Assertions.assertThat(result1.size()).isEqualTo(2);
+		Assertions.assertThat(result1.get(0).getId()).isEqualTo(1L);
+		Assertions.assertThat(result1.get(1).getId()).isEqualTo(2L);
+		Assertions.assertThat(result2.getTitle()).isEqualTo("Test Title1");
+		Assertions.assertThat(result2.getTodoOrder()).isEqualTo(1);
 	}
 
 	@Test
@@ -94,8 +100,21 @@ class SchedulerApplicationTests {
 	}
 
 	@Test
-	@DisplayName("DB GET 테스트")
-	void repositoryGetTest() {
+	void deleteTest() {
+		Schedule schedule = Schedule.builder()
+				.title("Test Title")
+				.todoOrder(1)
+				.completed(false)
+				.build();
 
+		schedule = scheduleService.createSchedule(schedule);
+
+		scheduleService.deleteSchedule(schedule.getId());
+
+		Assertions.assertThatThrownBy(() -> scheduleService.findSchedule(4L)).isInstanceOf(CustomException.class);
 	}
+}
+
+class ScheduleServiceTest {
+
 }

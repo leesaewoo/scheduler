@@ -58,6 +58,13 @@ public class ScheduleController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    @GetMapping("/todoAppTest")
+    public String getTestTodoApp() {
+        String response = "To-do Application !";
+
+        return response;
+    }
+
     @PatchMapping("{id}")
     public ResponseEntity patchSchedule(@PathVariable("id") @Positive long id,
                                         @RequestBody @Valid SchedulePatchDto schedulePatchDto) {
