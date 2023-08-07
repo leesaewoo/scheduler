@@ -117,4 +117,11 @@ class ScheduleRepositoryTest {
 
 class ScheduleServiceTest {
 
+	@MockBean
+	ScheduleRepository scheduleRepository;
+
+	@Test
+	void createScheduleTest() {
+
+	}
 }
